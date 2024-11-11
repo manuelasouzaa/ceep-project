@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import br.com.alura.ceep.database.AppDatabase
 import br.com.alura.ceep.databinding.ActivityListaNotasBinding
 import br.com.alura.ceep.extensions.vaiPara
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
+import br.com.alura.ceep.webclient.NotaWebCient
 import kotlinx.coroutines.launch
 
 class ListaNotasActivity : AppCompatActivity() {
@@ -25,6 +27,9 @@ class ListaNotasActivity : AppCompatActivity() {
     private val dao by lazy {
         AppDatabase.instancia(this).notaDao()
     }
+    private val webClient by lazy {
+        NotaWebCient()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,8 @@ class ListaNotasActivity : AppCompatActivity() {
         configuraFab()
         configuraRecyclerView()
         lifecycleScope.launch {
+            val notas = webClient.buscaTodas()
+            Log.i("ListaNotas", "onCreate: $notas")
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 buscaNotas()
             }
