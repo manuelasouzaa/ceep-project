@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NotaDao {
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     suspend fun salvaNotas(note: List<Nota>)
 
     @Insert(onConflict = REPLACE)
@@ -20,9 +20,9 @@ interface NotaDao {
     fun buscaTodas() : Flow<List<Nota>>
 
     @Query("SELECT * FROM Nota WHERE id = :id")
-    fun buscaPorId(id: Long): Flow<Nota>
+    fun buscaPorId(id: String): Flow<Nota>
 
     @Query("DELETE FROM Nota WHERE id = :id")
-    suspend fun remove(id: Long)
+    suspend fun remove(id: String)
 
 }
